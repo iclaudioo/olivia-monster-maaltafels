@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { motion, type Variants } from "framer-motion";
+import { motion, AnimatePresence, type Variants } from "framer-motion";
 import { useProgress } from "@/hooks/useProgress";
 import { useSound } from "@/hooks/useSound";
 import { xpForCurrentLevel, XP_PER_LEVEL } from "@/lib/xp";
@@ -64,6 +64,7 @@ export default function HubPage() {
   const { progress, loaded, toggleSound, pendingLevelUp, dismissLevelUp } =
     useProgress();
   const { click } = useSound(progress.soundEnabled);
+  const [selectedTable, setSelectedTable] = useState<number | null>(null);
 
   useEffect(() => {
     if (loaded && !progress.avatar) {
@@ -164,22 +165,73 @@ export default function HubPage() {
               const stars = tableData?.stars ?? 0;
 
               return (
-                <motion.div
+                <motion.button
                   key={t}
-                  className="card-surface flex flex-col items-center gap-1 py-3"
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
+                  className="card-surface flex flex-col items-center gap-1 py-3 min-h-[60px] cursor-pointer"
+                  whileTap={{ scale: 0.92 }}
+                  onClick={() => {
+                    click();
+                    setSelectedTable(t);
+                  }}
                 >
                   <span className="text-lg font-bold text-monster-text">
                     x{t}
                   </span>
                   <StarRating stars={stars} size="sm" />
-                </motion.div>
+                </motion.button>
               );
             })}
           </div>
         </motion.div>
       </motion.div>
+
+      {/* Maaltafel detail modal */}
+      <AnimatePresence>
+        {selectedTable !== null && (
+          <motion.div
+            className="fixed inset-0 z-40 flex items-center justify-center bg-black/60 px-4"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setSelectedTable(null)}
+          >
+            <motion.div
+              className="card-surface w-full max-w-xs p-6"
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.8, opacity: 0 }}
+              transition={{ type: "spring", stiffness: 300, damping: 25 }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <h3 className="mb-4 text-center text-2xl font-bold text-monster-gold">
+                Tafel van {selectedTable}
+              </h3>
+              <div className="flex flex-col gap-2">
+                {Array.from({ length: 10 }, (_, i) => i + 1).map((n) => (
+                  <div
+                    key={n}
+                    className="flex items-center justify-between rounded-lg bg-monster-darkest/40 px-4 py-2"
+                  >
+                    <span className="text-lg font-semibold text-monster-light">
+                      {selectedTable} x {n}
+                    </span>
+                    <span className="text-lg font-bold text-monster-gold">
+                      = {selectedTable * n}
+                    </span>
+                  </div>
+                ))}
+              </div>
+              <motion.button
+                className="btn-primary glow-purple mt-5 w-full text-lg font-bold text-white"
+                whileTap={{ scale: 0.95 }}
+                onClick={() => setSelectedTable(null)}
+              >
+                Sluiten
+              </motion.button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Level-up modal */}
       {pendingLevelUp && (
