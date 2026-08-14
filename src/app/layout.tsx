@@ -2,13 +2,13 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Monster maaltafels",
-  description: "Oefen je maaltafels met weerwolven en vampieren!",
+  title: "Olivia's maaltafels",
+  description: "Oefen je maaltafels in de nacht van de vampieren en weerwolven!",
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
-    title: "Monster maaltafels",
+    title: "Olivia's maaltafels",
   },
 };
 
@@ -29,11 +29,13 @@ export default function RootLayout({
     <html lang="nl">
       <head>
         <link
-          href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700;800&family=Quicksand:wght@400;500;600;700&display=swap"
           rel="stylesheet"
         />
       </head>
-      <body className="antialiased">{children}</body>
+      <body className="antialiased">
+        {children}
+      </body>
     </html>
   );
 }

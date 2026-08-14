@@ -33,8 +33,8 @@ export default function CountdownTimer({
   }, [seconds, isRunning]);
 
   const isLow = seconds <= 10 && seconds > 0;
-  const strokeColor = isLow ? "#EF4444" : "#7C3AED";
-  const textColor = isLow ? "text-monster-red" : "text-monster-text";
+  const strokeColor = isLow ? "#FF6B6B" : "#4CAF6E";
+  const textColor = isLow ? "text-forest-coral" : "text-forest-cream";
 
   return (
     <div className="relative inline-flex items-center justify-center w-24 h-24">
@@ -50,7 +50,7 @@ export default function CountdownTimer({
           cy="48"
           r={RADIUS}
           fill="none"
-          stroke="rgba(124, 58, 237, 0.2)"
+          stroke="rgba(76, 175, 110, 0.2)"
           strokeWidth="6"
         />
 
@@ -76,14 +76,14 @@ export default function CountdownTimer({
           }}
           style={{
             filter: isLow
-              ? "drop-shadow(0 0 8px rgba(239, 68, 68, 0.6))"
-              : "drop-shadow(0 0 8px rgba(124, 58, 237, 0.4))",
+              ? "drop-shadow(0 0 8px rgba(255, 107, 107, 0.6))"
+              : "drop-shadow(0 0 8px rgba(76, 175, 110, 0.4))",
           }}
         />
       </svg>
 
       <span
-        className={`absolute text-2xl font-bold ${textColor}`}
+        className={`absolute text-2xl font-bold font-display ${textColor}`}
       >
         {Math.max(0, seconds)}
       </span>

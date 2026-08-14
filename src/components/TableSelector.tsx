@@ -45,12 +45,12 @@ export default function TableSelector({
                 py-3 px-2 rounded-xl transition-all
                 ${
                   isSelected
-                    ? "ring-2 ring-monster-purple glow-purple"
+                    ? "ring-2 ring-forest-green glow-green"
                     : "opacity-60"
                 }
               `}
             >
-              <span className="text-xl font-bold text-monster-text">
+              <span className="text-2xl font-bold text-forest-cream font-display">
                 {table}
               </span>
               <StarRating stars={stars[table] ?? 0} size="sm" />
@@ -63,9 +63,9 @@ export default function TableSelector({
         onClick={handleToggleAll}
         whileTap={{ scale: 0.95 }}
         className={`
-          mt-3 w-full py-3 rounded-xl font-semibold text-monster-text
+          mt-3 w-full py-3 rounded-xl font-semibold text-forest-cream
           transition-all
-          ${allSelected ? "bg-monster-purple/40 border border-monster-purple" : "btn-primary"}
+          ${allSelected ? "bg-forest-green/30 border border-forest-green" : "btn-primary"}
         `}
       >
         {allSelected ? "Alles deselecteren" : "Alle tafels"}

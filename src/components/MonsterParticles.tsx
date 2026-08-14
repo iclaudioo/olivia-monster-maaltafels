@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 
-const EMOJIS = ["🦇", "⭐", "🌙", "🦇", "⭐", "🌙", "🦇", "⭐"];
+const FOREST_ELEMENTS = ["🦇", "🌙", "✨", "🐺", "🦇", "✨", "🌕", "🐾", "🧛", "✨"];
 
 interface FloatingElement {
   id: number;
@@ -16,14 +16,14 @@ interface FloatingElement {
 }
 
 function createElements(): FloatingElement[] {
-  return EMOJIS.map((emoji, i) => ({
+  return FOREST_ELEMENTS.map((emoji, i) => ({
     id: i,
     emoji,
     x: Math.random() * 90 + 5,
     y: Math.random() * 80 + 10,
-    size: Math.random() * 10 + 14,
-    duration: Math.random() * 4 + 4,
-    delay: Math.random() * 3,
+    size: Math.random() * 10 + 12,
+    duration: Math.random() * 5 + 5,
+    delay: Math.random() * 4,
   }));
 }
 
@@ -35,16 +35,16 @@ export default function MonsterParticles() {
       {elements.map((el) => (
         <motion.span
           key={el.id}
-          className="absolute select-none opacity-20"
+          className="absolute select-none opacity-15"
           style={{
             left: `${el.x}%`,
             top: `${el.y}%`,
             fontSize: el.size,
           }}
           animate={{
-            y: [0, -20, 0],
-            x: [0, 10, -10, 0],
-            rotate: [0, 10, -10, 0],
+            y: [0, -15, 5, 0],
+            x: [0, 8, -6, 0],
+            rotate: [0, 15, -10, 0],
           }}
           transition={{
             duration: el.duration,

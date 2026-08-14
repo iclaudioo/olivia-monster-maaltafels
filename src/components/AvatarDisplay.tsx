@@ -1,67 +1,75 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "framer-motion";
+import { MONSTER_TYPES } from "@/hooks/useAvatar";
 
-const MONSTER_EMOJI: Record<string, string> = {
+const FALLBACK_EMOJI: Record<string, string> = {
   weerwolf: "🐺",
   vampier: "🧛",
-  heks: "🧙",
-  spook: "👻",
+  wolfje: "🐾",
+  vleermuisje: "🦇",
 };
 
 const SIZE_CLASSES = {
-  sm: "w-16 h-16 text-3xl",
-  md: "w-24 h-24 text-5xl",
-  lg: "w-32 h-32 text-6xl",
+  sm: "w-16 h-16",
+  md: "w-24 h-24",
+  lg: "w-32 h-32",
 };
 
-const ACCESSORY_SIZE = {
-  sm: "text-sm",
-  md: "text-lg",
-  lg: "text-xl",
+const EMOJI_SIZE_CLASSES = {
+  sm: "text-3xl",
+  md: "text-5xl",
+  lg: "text-6xl",
 };
 
 interface AvatarDisplayProps {
-  type: "weerwolf" | "vampier" | "heks" | "spook";
+  type: "weerwolf" | "vampier" | "wolfje" | "vleermuisje";
   color: string;
-  accessory: string;
   name: string;
   size?: "sm" | "md" | "lg";
+  accessory?: string;
 }
 
 export default function AvatarDisplay({
   type,
   color,
-  accessory,
   name,
   size = "md",
 }: AvatarDisplayProps) {
-  const emoji = MONSTER_EMOJI[type] ?? "👻";
+  const [imgError, setImgError] = useState(false);
+  const monsterType = MONSTER_TYPES.find((m) => m.id === type);
+  const imageSrc = monsterType?.image;
+  const fallbackEmoji = FALLBACK_EMOJI[type] ?? "🐺";
 
   return (
     <div className="flex flex-col items-center gap-1">
       <motion.div
         className="relative"
         animate={{ y: [0, -8, 0] }}
-        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
       >
         <div
-          className={`${SIZE_CLASSES[size]} rounded-full flex items-center justify-center relative`}
-          style={{ backgroundColor: color }}
+          className={`${SIZE_CLASSES[size]} rounded-full flex items-center justify-center relative overflow-hidden`}
+          style={{
+            backgroundColor: color,
+            boxShadow: `0 0 20px ${color}40`,
+          }}
         >
-          <span className="select-none">{emoji}</span>
-
-          {accessory && (
-            <span
-              className={`absolute -top-1 -right-1 ${ACCESSORY_SIZE[size]} select-none`}
-            >
-              {accessory}
-            </span>
+          {imageSrc && !imgError ? (
+            <img
+              src={imageSrc}
+              alt={monsterType?.name ?? type}
+              className="w-[85%] h-[85%] object-contain select-none"
+              onError={() => setImgError(true)}
+            />
+          ) : (
+            <span className={`${EMOJI_SIZE_CLASSES[size]} select-none`}>{fallbackEmoji}</span>
           )}
         </div>
       </motion.div>
 
-      <span className="text-monster-text font-semibold text-sm truncate max-w-[120px]">
+      <span className="text-forest-cream font-semibold text-base truncate max-w-[120px] font-display">
         {name}
       </span>
     </div>

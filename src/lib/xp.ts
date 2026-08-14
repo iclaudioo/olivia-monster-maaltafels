@@ -12,18 +12,18 @@ export interface LevelReward {
 }
 
 export const LEVEL_REWARDS: LevelReward[] = [
-  { level: 2, type: "monster", id: "vampier-blauw", name: "Blauwe vampier", emoji: "🧛" },
-  { level: 3, type: "accessory", id: "kroon", name: "Gouden kroon", emoji: "👑" },
-  { level: 4, type: "monster", id: "heks-groen", name: "Groene heks", emoji: "🧙" },
-  { level: 5, type: "background", id: "kasteel", name: "Spookkasteel", emoji: "🏰" },
-  { level: 6, type: "accessory", id: "toverstaf", name: "Toverstaf", emoji: "🪄" },
-  { level: 7, type: "monster", id: "spook-goud", name: "Gouden spook", emoji: "👻" },
-  { level: 8, type: "background", id: "maanbos", name: "Maanlichtbos", emoji: "🌙" },
-  { level: 9, type: "accessory", id: "vleugels", name: "Vleermuisvleugels", emoji: "🦇" },
-  { level: 10, type: "monster", id: "weerwolf-zilver", name: "Zilveren weerwolf", emoji: "🐺" },
-  { level: 12, type: "background", id: "kerkhof", name: "Griezelig kerkhof", emoji: "⚰️" },
-  { level: 15, type: "monster", id: "draak", name: "Paarse draak", emoji: "🐉" },
-  { level: 20, type: "accessory", id: "diamant", name: "Diamanten amulet", emoji: "💎" },
+  { level: 2, type: "monster", id: "vampiervleermuis", name: "Vampiervleermuis", emoji: "🦇" },
+  { level: 3, type: "accessory", id: "zilveren-ketting", name: "Zilveren ketting", emoji: "🔗" },
+  { level: 4, type: "monster", id: "wolfwelp", name: "Wolfwelp", emoji: "🐺" },
+  { level: 5, type: "background", id: "spookkasteel", name: "Spookkasteel", emoji: "🏰" },
+  { level: 6, type: "accessory", id: "vampiercape", name: "Vampiercape", emoji: "🦇" },
+  { level: 7, type: "monster", id: "gouden-weerwolf", name: "Gouden weerwolf", emoji: "🐺" },
+  { level: 8, type: "background", id: "kerkhof-maanlicht", name: "Kerkhof bij maanlicht", emoji: "🌕" },
+  { level: 9, type: "accessory", id: "vleermuisvleugels", name: "Vleermuisvleugels", emoji: "🦇" },
+  { level: 10, type: "monster", id: "zilveren-vampier", name: "Zilveren vampier", emoji: "🧛" },
+  { level: 12, type: "background", id: "volle-maan", name: "Volle maan", emoji: "🌕" },
+  { level: 15, type: "monster", id: "graaf-dracula", name: "Graaf Dracula", emoji: "🧛‍♂️" },
+  { level: 20, type: "accessory", id: "bloedrobijn", name: "Bloedrobijn", emoji: "💎" },
 ];
 
 export function calculateLevel(xp: number): number {

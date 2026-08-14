@@ -14,21 +14,21 @@ export default function XPBar({ current, max, level }: XPBarProps) {
   return (
     <div className="w-full">
       <div className="flex items-center justify-between mb-1">
-        <span className="text-sm font-semibold text-monster-light">
+        <span className="text-sm font-semibold text-forest-light font-display">
           Level {level}
         </span>
-        <span className="text-xs text-monster-muted">
+        <span className="text-xs text-forest-muted">
           {current} / {max} XP
         </span>
       </div>
 
-      <div className="h-4 rounded-full bg-monster-darkest/60 overflow-hidden border border-monster-purple/30">
+      <div className="h-4 rounded-full bg-forest-deepest/60 overflow-hidden border border-forest-green/30">
         <motion.div
           className="h-full rounded-full"
           style={{
             background:
-              "linear-gradient(90deg, #7C3AED 0%, #A78BFA 60%, #7C3AED 100%)",
-            boxShadow: "0 0 12px rgba(124, 58, 237, 0.6)",
+              "linear-gradient(90deg, #4CAF6E 0%, #8FD4A4 60%, #FFD166 100%)",
+            boxShadow: "0 0 12px rgba(76, 175, 110, 0.6)",
           }}
           initial={{ width: 0 }}
           animate={{ width: `${percent}%` }}

@@ -86,10 +86,6 @@ export function useProgress() {
     [progress, save]
   );
 
-  const toggleSound = useCallback(() => {
-    save({ ...progress, soundEnabled: !progress.soundEnabled });
-  }, [progress, save]);
-
   const dismissLevelUp = useCallback(() => {
     setPendingLevelUp(null);
   }, []);
@@ -102,7 +98,6 @@ export function useProgress() {
     updateStreak,
     updateRaceScore,
     setAvatar,
-    toggleSound,
     pendingLevelUp,
     dismissLevelUp,
   };

@@ -21,8 +21,8 @@ export default function StarRating({ stars, size = "md" }: StarRatingProps) {
           key={i}
           className={
             i < clamped
-              ? "text-monster-gold drop-shadow-[0_0_6px_rgba(255,215,0,0.6)]"
-              : "text-monster-muted"
+              ? "text-forest-gold drop-shadow-[0_0_6px_rgba(255,209,102,0.6)]"
+              : "text-forest-muted"
           }
         >
           ★

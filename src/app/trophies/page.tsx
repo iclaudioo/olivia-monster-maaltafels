@@ -1,14 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { motion, type Variants } from "framer-motion";
+import { motion } from "framer-motion";
 import { useProgress } from "@/hooks/useProgress";
-import { useSound } from "@/hooks/useSound";
-import { getUnlockedRewards, getLockedRewards, LEVEL_REWARDS } from "@/lib/xp";
+import { getUnlockedRewards, getLockedRewards } from "@/lib/xp";
 import { MONSTER_COLORS } from "@/hooks/useAvatar";
 import AvatarDisplay from "@/components/AvatarDisplay";
 import StarRating from "@/components/StarRating";
-import MuteButton from "@/components/MuteButton";
 import MonsterParticles from "@/components/MonsterParticles";
 
 const container = {
@@ -25,12 +23,11 @@ const item = {
 };
 
 function getColorHex(colorId: string): string {
-  return MONSTER_COLORS.find((c) => c.id === colorId)?.hex ?? "#7C3AED";
+  return MONSTER_COLORS.find((c) => c.id === colorId)?.hex ?? "#9C27B0";
 }
 
 export default function TrophiesPage() {
-  const { progress, loaded, toggleSound } = useProgress();
-  const { click } = useSound(progress.soundEnabled);
+  const { progress, loaded } = useProgress();
 
   if (!loaded) {
     return (
@@ -40,7 +37,7 @@ export default function TrophiesPage() {
           animate={{ rotate: 360 }}
           transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
         >
-          👻
+          🧛
         </motion.div>
       </div>
     );
@@ -49,7 +46,6 @@ export default function TrophiesPage() {
   const unlockedRewards = getUnlockedRewards(progress.level);
   const lockedRewards = getLockedRewards(progress.level);
 
-  // Determine favorite table (most total attempts)
   const tables = Array.from({ length: 10 }, (_, i) => i + 1);
   const favoriteTable = tables.reduce((best, t) => {
     const current = progress.tables[t]?.totalAttempts ?? 0;
@@ -61,8 +57,6 @@ export default function TrophiesPage() {
   return (
     <div className="relative min-h-dvh px-4 py-6 pb-12">
       <MonsterParticles />
-      <MuteButton muted={!progress.soundEnabled} onToggle={toggleSound} />
-
       <motion.div
         className="mx-auto flex w-full max-w-md flex-col gap-8"
         variants={container}
@@ -73,12 +67,11 @@ export default function TrophiesPage() {
         <motion.div className="flex items-center justify-between" variants={item}>
           <Link
             href="/"
-            onClick={() => click()}
-            className="text-monster-light text-lg font-semibold"
+            className="text-forest-light text-xl font-semibold"
           >
             &larr; Terug
           </Link>
-          <h1 className="text-2xl font-bold text-monster-gold">
+          <h1 className="text-3xl font-bold text-forest-gold font-display">
             {"🏆"} Trofeeën
           </h1>
           <div className="w-16" />
@@ -91,16 +84,15 @@ export default function TrophiesPage() {
               <AvatarDisplay
                 type={progress.avatar.type}
                 color={getColorHex(progress.avatar.color)}
-                accessory={progress.avatar.accessory}
                 name={progress.avatar.name}
                 size="lg"
               />
             ) : (
-              <div className="text-6xl">{"👻"}</div>
+              <div className="text-6xl">{"🧛"}</div>
             )}
 
             <div className="text-center">
-              <div className="text-xl font-bold text-monster-gold">
+              <div className="text-2xl font-bold text-forest-gold font-display">
                 Level {progress.level}
               </div>
             </div>
@@ -121,7 +113,7 @@ export default function TrophiesPage() {
               <StatCard
                 label="Beste race"
                 value={progress.bestRaceScore.toString()}
-                emoji="⏱️"
+                emoji="🐺"
                 delay={0.2}
               />
               <StatCard
@@ -136,12 +128,12 @@ export default function TrophiesPage() {
 
         {/* Section 2: Unlocked rewards */}
         <motion.div variants={item}>
-          <h2 className="mb-3 text-xl font-bold text-monster-light">
+          <h2 className="mb-3 text-2xl font-bold text-forest-light font-display">
             {"🎁"} Ontgrendeld
           </h2>
 
           {unlockedRewards.length === 0 ? (
-            <div className="card-surface p-6 text-center text-monster-muted">
+            <div className="card-surface p-6 text-center text-forest-muted">
               Nog geen beloningen ontgrendeld. Blijf oefenen!
             </div>
           ) : (
@@ -154,15 +146,15 @@ export default function TrophiesPage() {
               {unlockedRewards.map((reward) => (
                 <motion.div
                   key={reward.id}
-                  className="card-surface flex flex-col items-center gap-2 p-4 glow-purple"
+                  className="card-surface flex flex-col items-center gap-2 p-4 glow-green"
                   variants={item}
                   whileHover={{ scale: 1.05 }}
                 >
                   <span className="text-4xl">{reward.emoji}</span>
-                  <span className="text-sm font-semibold text-monster-text text-center leading-tight">
+                  <span className="text-base font-semibold text-forest-cream text-center leading-tight">
                     {reward.name}
                   </span>
-                  <span className="text-xs text-monster-gold font-bold">
+                  <span className="text-sm text-forest-gold font-bold">
                     Level {reward.level}
                   </span>
                 </motion.div>
@@ -174,7 +166,7 @@ export default function TrophiesPage() {
         {/* Section 3: Locked rewards */}
         {lockedRewards.length > 0 && (
           <motion.div variants={item}>
-            <h2 className="mb-3 text-xl font-bold text-monster-light">
+            <h2 className="mb-3 text-2xl font-bold text-forest-light font-display">
               {"🔒"} Nog te ontgrendelen
             </h2>
 
@@ -191,10 +183,10 @@ export default function TrophiesPage() {
                   variants={item}
                 >
                   <span className="text-4xl grayscale">{"🔒"}</span>
-                  <span className="text-sm font-semibold text-monster-muted text-center leading-tight">
+                  <span className="text-base font-semibold text-forest-muted text-center leading-tight">
                     ???
                   </span>
-                  <span className="text-xs text-monster-muted font-bold">
+                  <span className="text-sm text-forest-muted font-bold">
                     Level {reward.level}
                   </span>
                 </motion.div>
@@ -205,8 +197,8 @@ export default function TrophiesPage() {
 
         {/* Section 4: Table mastery */}
         <motion.div variants={item}>
-          <h2 className="mb-3 text-xl font-bold text-monster-light">
-            {"📊"} Maaltafel meesterschap
+          <h2 className="mb-3 text-2xl font-bold text-forest-light font-display">
+            {"🌙"} Maaltafel meesterschap
           </h2>
 
           <motion.div
@@ -229,7 +221,7 @@ export default function TrophiesPage() {
                   variants={item}
                 >
                   {/* Table number */}
-                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-monster-purple/40 text-xl font-bold text-monster-text">
+                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-forest-green/30 text-2xl font-bold text-forest-cream font-display">
                     x{t}
                   </div>
 
@@ -237,22 +229,22 @@ export default function TrophiesPage() {
                   <div className="flex flex-1 flex-col gap-1">
                     <div className="flex items-center justify-between">
                       <StarRating stars={stars} size="sm" />
-                      <span className="text-sm text-monster-muted">
+                      <span className="text-base text-forest-muted">
                         {attempts > 0 ? `${percentage}% juist` : "Nog niet geoefend"}
                       </span>
                     </div>
 
                     {/* Progress bar */}
-                    <div className="h-2 w-full overflow-hidden rounded-full bg-monster-purple/20">
+                    <div className="h-2 w-full overflow-hidden rounded-full bg-forest-green/20">
                       <motion.div
                         className="h-full rounded-full"
                         style={{
                           background:
                             percentage >= 80
-                              ? "linear-gradient(90deg, #34D399, #7C3AED)"
+                              ? "linear-gradient(90deg, #4CAF6E, #FFD166)"
                               : percentage >= 50
-                                ? "linear-gradient(90deg, #FFD700, #7C3AED)"
-                                : "linear-gradient(90deg, #EF4444, #7C3AED)",
+                                ? "linear-gradient(90deg, #FFD166, #FF8FAB)"
+                                : "linear-gradient(90deg, #FF6B6B, #FF8FAB)",
                         }}
                         initial={{ width: 0 }}
                         animate={{ width: `${percentage}%` }}
@@ -260,7 +252,7 @@ export default function TrophiesPage() {
                       />
                     </div>
 
-                    <div className="flex justify-between text-xs text-monster-muted">
+                    <div className="flex justify-between text-sm text-forest-muted">
                       <span>{correctCount} juist</span>
                       <span>{attempts} pogingen</span>
                     </div>
@@ -275,7 +267,6 @@ export default function TrophiesPage() {
   );
 }
 
-/** Compact stat card for the player stats section. */
 function StatCard({
   label,
   value,
@@ -295,8 +286,8 @@ function StatCard({
       transition={{ delay, duration: 0.3 }}
     >
       <span className="text-2xl">{emoji}</span>
-      <span className="text-xl font-bold text-monster-text">{value}</span>
-      <span className="text-xs text-monster-muted leading-tight">{label}</span>
+      <span className="text-2xl font-bold text-forest-cream font-display">{value}</span>
+      <span className="text-sm text-forest-muted leading-tight">{label}</span>
     </motion.div>
   );
 }

@@ -42,23 +42,23 @@ export default function LevelUpModal({
           }}
         >
           <h2
-            className="text-4xl font-bold mb-2"
+            className="text-4xl font-bold font-display mb-2"
             style={{
-              color: "#FFD700",
-              textShadow: "0 0 20px rgba(255, 215, 0, 0.5)",
+              color: "#FFD166",
+              textShadow: "0 0 20px rgba(255, 209, 102, 0.5)",
             }}
           >
             LEVEL UP!
           </h2>
 
-          <p className="text-6xl font-bold text-monster-text mb-4">
+          <p className="text-6xl font-bold text-forest-cream font-display mb-4">
             {level}
           </p>
 
           {reward && (
             <div className="mb-6">
               <span className="text-5xl block mb-2">{reward.emoji}</span>
-              <p className="text-lg text-monster-light font-semibold">
+              <p className="text-lg text-forest-light font-semibold">
                 {reward.name} vrijgespeeld!
               </p>
             </div>
@@ -66,7 +66,7 @@ export default function LevelUpModal({
 
           <motion.button
             onClick={onDismiss}
-            className="btn-primary text-monster-text text-lg w-full"
+            className="btn-primary text-lg w-full font-bold"
             whileTap={{ scale: 0.95 }}
           >
             Geweldig!

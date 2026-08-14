@@ -4,13 +4,11 @@ import { useState, useCallback, useMemo } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { useProgress } from "@/hooks/useProgress";
-import { useSound } from "@/hooks/useSound";
 import { useMultiplication } from "@/hooks/useMultiplication";
 import FlashCard from "@/components/FlashCard";
 import TableSelector from "@/components/TableSelector";
 import StarRating from "@/components/StarRating";
 import ConfettiEffect from "@/components/ConfettiEffect";
-import MuteButton from "@/components/MuteButton";
 import MonsterParticles from "@/components/MonsterParticles";
 import { calculateStars } from "@/lib/multiplication";
 
@@ -24,11 +22,8 @@ interface CardResult {
 }
 
 export default function FlashcardsPage() {
-  const { progress, loaded, addXP, recordTableResult, toggleSound } =
+  const { progress, loaded, addXP, recordTableResult } =
     useProgress();
-  const { correct: playCorrect, click: playClick } = useSound(
-    progress.soundEnabled
-  );
 
   const [phase, setPhase] = useState<Phase>("select");
   const [selectedTables, setSelectedTables] = useState<number[]>([]);
@@ -49,12 +44,11 @@ export default function FlashcardsPage() {
 
   const handleStart = useCallback(() => {
     if (selectedTables.length === 0) return;
-    playClick();
     startSession("flashcard");
     setCardIndex(0);
     setResults([]);
     setPhase("practice");
-  }, [selectedTables, startSession, playClick]);
+  }, [selectedTables, startSession]);
 
   const advanceCard = useCallback(
     (known: boolean) => {
@@ -68,18 +62,13 @@ export default function FlashcardsPage() {
         known,
       };
 
-      if (known) playCorrect();
-      else playClick();
 
       const newResults = [...results, result];
       setResults(newResults);
 
       if (cardIndex + 1 >= totalCards) {
-        // Klaar. Bereken resultaten per tafel.
         const knownCount = newResults.filter((r) => r.known).length;
-        const starsEarned = calculateStars(knownCount, newResults.length);
 
-        // Groepeer per tafel en sla resultaten op
         const tableGroups = new Map<number, { correct: number; total: number }>();
         for (const r of newResults) {
           const existing = tableGroups.get(r.a) ?? { correct: 0, total: 0 };
@@ -111,8 +100,6 @@ export default function FlashcardsPage() {
       results,
       cardIndex,
       totalCards,
-      playCorrect,
-      playClick,
       recordTableResult,
       addXP,
     ]
@@ -122,32 +109,27 @@ export default function FlashcardsPage() {
   const handleSwipeDown = useCallback(() => advanceCard(false), [advanceCard]);
   const handleSwipeLeft = useCallback(() => {
     if (cardIndex > 0 && !isTransitioning) {
-      playClick();
       setCardIndex((prev) => prev - 1);
       setResults((prev) => prev.slice(0, -1));
     }
-  }, [cardIndex, isTransitioning, playClick]);
+  }, [cardIndex, isTransitioning]);
   const handleSwipeRight = useCallback(() => {
     if (cardIndex + 1 < totalCards && results.length > cardIndex) {
-      playClick();
       setCardIndex((prev) => prev + 1);
     }
-  }, [cardIndex, totalCards, results, playClick]);
+  }, [cardIndex, totalCards, results]);
 
   const handleBackToSelect = useCallback(() => {
-    playClick();
     setPhase("select");
-  }, [playClick]);
+  }, []);
 
   const handleRestart = useCallback(() => {
-    playClick();
     startSession("flashcard");
     setCardIndex(0);
     setResults([]);
     setPhase("practice");
-  }, [startSession, playClick]);
+  }, [startSession]);
 
-  // Resultaatberekening voor done-fase
   const knownCount = results.filter((r) => r.known).length;
   const practiceCount = results.filter((r) => !r.known).length;
   const finalStars = calculateStars(knownCount, results.length);
@@ -175,7 +157,7 @@ export default function FlashcardsPage() {
           animate={{ rotate: 360 }}
           transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
         >
-          👻
+          🧛
         </motion.div>
       </div>
     );
@@ -187,18 +169,27 @@ export default function FlashcardsPage() {
 
       {/* Header */}
       <div className="w-full max-w-md flex items-center justify-between mb-6">
-        <Link
-          href={phase === "practice" ? "#" : "/"}
-          onClick={phase === "practice" ? handleBackToSelect : undefined}
-          className="text-monster-light text-sm font-semibold flex items-center gap-1 min-h-[44px] min-w-[44px] justify-center"
-        >
-          <span className="text-lg">&#8592;</span>
-          {phase === "practice" ? "Terug" : "Home"}
-        </Link>
-        <h1 className="text-xl font-bold text-monster-text font-display">
+        {phase === "practice" ? (
+          <button
+            onClick={handleBackToSelect}
+            className="text-forest-light text-lg font-semibold flex items-center gap-1 min-h-[44px] min-w-[44px] justify-center"
+          >
+            <span className="text-xl">&#8592;</span>
+            Terug
+          </button>
+        ) : (
+          <Link
+            href="/"
+            className="text-forest-light text-lg font-semibold flex items-center gap-1 min-h-[44px] min-w-[44px] justify-center"
+          >
+            <span className="text-xl">&#8592;</span>
+            Home
+          </Link>
+        )}
+        <h1 className="text-2xl font-bold text-forest-cream font-display">
           Flitskaarten
         </h1>
-        <MuteButton muted={!progress.soundEnabled} onToggle={toggleSound} />
+        <div className="w-11" />
       </div>
 
       <AnimatePresence mode="wait">
@@ -217,10 +208,10 @@ export default function FlashcardsPage() {
               animate={{ y: [0, -6, 0] }}
               transition={{ repeat: Infinity, duration: 2.5 }}
             >
-              🃏
+              🦇
             </motion.p>
 
-            <p className="text-monster-light text-center text-lg">
+            <p className="text-forest-light text-center text-xl">
               Kies welke tafels je wil oefenen
             </p>
 
@@ -234,12 +225,12 @@ export default function FlashcardsPage() {
               onClick={handleStart}
               disabled={selectedTables.length === 0}
               className={`
-                w-full py-4 rounded-xl text-xl font-bold text-monster-text
+                w-full py-4 rounded-xl text-xl font-bold
                 min-h-[56px] transition-all
                 ${
                   selectedTables.length === 0
-                    ? "bg-monster-surface/40 opacity-40 cursor-not-allowed"
-                    : "btn-primary glow-purple"
+                    ? "bg-forest-surface/40 text-forest-cream opacity-40 cursor-not-allowed"
+                    : "btn-primary glow-green"
                 }
               `}
               whileTap={selectedTables.length > 0 ? { scale: 0.95 } : undefined}
@@ -249,7 +240,7 @@ export default function FlashcardsPage() {
 
             <Link
               href="/"
-              className="text-monster-muted text-sm hover:text-monster-light transition-colors min-h-[44px] flex items-center"
+              className="text-forest-muted text-base hover:text-forest-light transition-colors min-h-[44px] flex items-center"
             >
               Terug naar home
             </Link>
@@ -268,23 +259,23 @@ export default function FlashcardsPage() {
           >
             {/* Progress indicator */}
             <div className="w-full flex items-center gap-3">
-              <div className="flex-1 h-2 rounded-full bg-monster-darkest/60 overflow-hidden">
+              <div className="flex-1 h-2 rounded-full bg-forest-deepest/60 overflow-hidden">
                 <motion.div
-                  className="h-full rounded-full bg-monster-purple"
+                  className="h-full rounded-full bg-forest-green"
                   animate={{ width: `${((cardIndex + 1) / totalCards) * 100}%` }}
                   transition={{ duration: 0.3 }}
                   style={{
-                    boxShadow: "0 0 8px rgba(124, 58, 237, 0.6)",
+                    boxShadow: "0 0 8px rgba(76, 175, 110, 0.6)",
                   }}
                 />
               </div>
-              <span className="text-sm font-semibold text-monster-light whitespace-nowrap">
+              <span className="text-base font-semibold text-forest-light whitespace-nowrap">
                 Kaart {cardIndex + 1}/{totalCards}
               </span>
             </div>
 
             {/* Instructies */}
-            <div className="flex justify-between w-full text-xs text-monster-muted px-4">
+            <div className="flex justify-between w-full text-base text-forest-muted px-4">
               <span>&#8592; vorige</span>
               <span>tik om te draaien</span>
               <span>volgende &#8594;</span>
@@ -312,23 +303,28 @@ export default function FlashcardsPage() {
               </AnimatePresence>
             </div>
 
-            {/* Swipe-hints */}
-            <div className="flex flex-col items-center gap-2 text-sm">
-              <motion.div
-                className="flex items-center gap-2 text-monster-green font-semibold"
-                animate={{ y: [0, -4, 0] }}
-                transition={{ repeat: Infinity, duration: 1.5 }}
+            {/* Actie-knoppen */}
+            <div className="flex w-full gap-3">
+              <motion.button
+                onClick={() => advanceCard(true)}
+                className="flex-1 py-4 rounded-xl text-xl font-bold bg-forest-green/30 border border-forest-green text-forest-green min-h-[56px]"
+                whileTap={{ scale: 0.95 }}
               >
-                <span>&#8593;</span> Geweten!
-              </motion.div>
-              <motion.div
-                className="flex items-center gap-2 text-monster-pink font-semibold"
-                animate={{ y: [0, 4, 0] }}
-                transition={{ repeat: Infinity, duration: 1.5 }}
+                Geweten!
+              </motion.button>
+              <motion.button
+                onClick={() => advanceCard(false)}
+                className="flex-1 py-4 rounded-xl text-xl font-bold bg-forest-pink/20 border border-forest-pink text-forest-pink min-h-[56px]"
+                whileTap={{ scale: 0.95 }}
               >
-                <span>&#8595;</span> Nog oefenen
-              </motion.div>
+                Nog oefenen
+              </motion.button>
             </div>
+
+            {/* Swipe-hints */}
+            <p className="text-base text-forest-muted text-center">
+              Of swipe omhoog / omlaag
+            </p>
           </motion.div>
         )}
 
@@ -345,7 +341,7 @@ export default function FlashcardsPage() {
             {finalStars >= 3 && <ConfettiEffect />}
 
             <motion.h2
-              className="text-4xl font-bold text-monster-gold font-display"
+              className="text-4xl font-bold text-forest-gold font-display"
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ type: "spring", stiffness: 200, damping: 12 }}
@@ -364,18 +360,18 @@ export default function FlashcardsPage() {
             {/* Resultaat samenvatting */}
             <div className="card-surface w-full p-6 flex flex-col gap-4">
               <div className="flex justify-between items-center">
-                <span className="text-monster-light text-lg">Geweten</span>
-                <span className="text-2xl font-bold text-monster-green">
+                <span className="text-forest-light text-xl">Geweten</span>
+                <span className="text-3xl font-bold text-forest-green">
                   {knownCount}
                 </span>
               </div>
               <div className="flex justify-between items-center">
-                <span className="text-monster-light text-lg">Nog oefenen</span>
-                <span className="text-2xl font-bold text-monster-pink">
+                <span className="text-forest-light text-xl">Nog oefenen</span>
+                <span className="text-3xl font-bold text-forest-pink">
                   {practiceCount}
                 </span>
               </div>
-              <div className="h-px bg-monster-purple/30" />
+              <div className="h-px bg-forest-green/30" />
 
               {/* Sterren per tafel */}
               <div className="flex flex-col gap-2">
@@ -384,7 +380,7 @@ export default function FlashcardsPage() {
                     key={table}
                     className="flex items-center justify-between"
                   >
-                    <span className="text-monster-light font-semibold">
+                    <span className="text-forest-light font-semibold">
                       Tafel van {table}
                     </span>
                     <StarRating stars={stars} size="md" />
@@ -396,7 +392,7 @@ export default function FlashcardsPage() {
             {/* Knoppen */}
             <motion.button
               onClick={handleRestart}
-              className="w-full py-4 rounded-xl text-xl font-bold text-monster-text btn-primary glow-purple min-h-[56px]"
+              className="w-full py-4 rounded-xl text-xl font-bold btn-primary glow-green min-h-[56px]"
               whileTap={{ scale: 0.95 }}
             >
               Opnieuw
@@ -404,7 +400,7 @@ export default function FlashcardsPage() {
 
             <Link
               href="/"
-              className="text-monster-muted text-sm hover:text-monster-light transition-colors min-h-[44px] flex items-center"
+              className="text-forest-muted text-base hover:text-forest-light transition-colors min-h-[44px] flex items-center"
             >
               Terug naar home
             </Link>

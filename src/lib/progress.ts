@@ -7,9 +7,8 @@ export interface TableProgress {
 }
 
 export interface AvatarConfig {
-  type: "weerwolf" | "vampier" | "heks" | "spook";
+  type: "weerwolf" | "vampier" | "wolfje" | "vleermuisje";
   color: string;
-  accessory: string;
   name: string;
 }
 
@@ -23,7 +22,6 @@ export interface PlayerProgress {
   totalAttempts: number;
   longestStreak: number;
   bestRaceScore: number;
-  soundEnabled: boolean;
 }
 
 const STORAGE_KEY = "olivia-monster-maaltafels";
@@ -44,7 +42,6 @@ export function getDefaultProgress(): PlayerProgress {
     totalAttempts: 0,
     longestStreak: 0,
     bestRaceScore: 0,
-    soundEnabled: true,
   };
 }
 

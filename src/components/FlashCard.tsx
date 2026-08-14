@@ -74,7 +74,7 @@ export default function FlashCard({
           className="card-surface absolute inset-0 flex items-center justify-center p-6"
           style={{ backfaceVisibility: "hidden" }}
         >
-          <span className="text-4xl font-bold text-monster-text text-center">
+          <span className="text-5xl font-bold text-forest-cream text-center font-display">
             {front}
           </span>
         </div>
@@ -84,7 +84,7 @@ export default function FlashCard({
           className="card-surface absolute inset-0 flex items-center justify-center p-6"
           style={{ backfaceVisibility: "hidden", transform: "rotateY(180deg)" }}
         >
-          <span className="text-5xl font-bold text-monster-gold text-center">
+          <span className="text-6xl font-bold text-forest-gold text-center font-display">
             {back}
           </span>
         </div>

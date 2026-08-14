@@ -28,13 +28,13 @@ export default function QuizOption({
       onClick={onSelect}
       disabled={disabled || isRevealed}
       className={`
-        card-surface min-h-16 w-full px-6 py-4 text-2xl font-bold
-        text-monster-text rounded-xl transition-colors
+        card-surface min-h-16 w-full px-6 py-4 text-3xl font-bold
+        text-forest-cream rounded-xl transition-colors
         disabled:cursor-not-allowed
-        ${isSelected && !isRevealed ? "ring-2 ring-monster-purple" : ""}
-        ${isCorrectRevealed ? "!border-monster-green" : ""}
-        ${isCorrectShown ? "!border-monster-green/50" : ""}
-        ${isWrongRevealed ? "!border-monster-red" : ""}
+        ${isSelected && !isRevealed ? "ring-2 ring-forest-green" : ""}
+        ${isCorrectRevealed ? "!border-forest-green" : ""}
+        ${isCorrectShown ? "!border-forest-green/50" : ""}
+        ${isWrongRevealed ? "!border-forest-coral" : ""}
       `}
       animate={
         isCorrectRevealed
@@ -47,18 +47,18 @@ export default function QuizOption({
       whileTap={!disabled && !isRevealed ? { scale: 0.95 } : undefined}
       style={{
         boxShadow: isCorrectRevealed
-          ? "0 0 20px rgba(52, 211, 153, 0.6)"
+          ? "0 0 20px rgba(76, 175, 110, 0.6)"
           : isWrongRevealed
-            ? "0 0 20px rgba(239, 68, 68, 0.5)"
+            ? "0 0 20px rgba(255, 107, 107, 0.5)"
             : undefined,
       }}
     >
       <span
         className={
           isCorrectRevealed || isCorrectShown
-            ? "text-monster-green"
+            ? "text-forest-green"
             : isWrongRevealed
-              ? "text-monster-red"
+              ? "text-forest-coral"
               : ""
         }
       >

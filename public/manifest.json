@@ -1,11 +1,11 @@
 {
-  "name": "Monster maaltafels",
-  "short_name": "Maaltafels",
-  "description": "Oefen je maaltafels met weerwolven en vampieren!",
+  "name": "Olivia's rekenwereld",
+  "short_name": "Rekenwereld",
+  "description": "Oefen je maaltafels in een betoverd bos!",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#1E1040",
-  "theme_color": "#7C3AED",
+  "background_color": "#0F2318",
+  "theme_color": "#4CAF6E",
   "orientation": "portrait",
   "icons": [
     {
